@@ -1,6 +1,6 @@
 # Introduction 
 
-This repository contains a sample Azure App Service and Terraform sample code to deploy it. This is a I used to demonstrate/test purposes only. Feel free to use these as you wish! and create an issue if you find any:) This project was inspired by [SoniaConti](https://github.com/SoniaConti) and her ARM project https://github.com/SoniaConti/ContosoFinance-Demo.
+This repository contains a sample Azure App Service and Terraform sample code to deploy it. This is for demonstrate/test purposes only using IaC. Feel free to use these as you wish! and create an issue if you find any:) This project was inspired by [SoniaConti](https://github.com/SoniaConti) and her ARM project https://github.com/SoniaConti/ContosoFinance-Demo.
 
 
 <p align="center">
@@ -18,9 +18,11 @@ In this project we will create a Website using Azure App Service.
 Azure App Service is a Platform as a Service (PaaS), in other words it is a fully managed platform used for hosting web applications, like this one below, Mobile Apps, Logic Apps, API Apps and Function Apps.
 
 
-# Why Should you use Infrastructure as Code?
+# What is Terraform and why should you use it for your Infrastructure as Code (IaC?
 
-Infrastructure as code (IaC) enables you to automatically provision your environment with no manual intervention. For this demo we use JSON however the same resources can be deployed using different languages such as Bicep or Terraform.
+![Terraform](https://github.com/gogorichie/Terraform-ContosoFinance-Demo/blob/master/images/terraform-color.png)
+
+Terraform is an open-source tool created by HashiCorp that allows you to define and manage your infrastructure as code (IaC). It enables you to create, modify, and delete your infrastructure resources, such as virtual machines, load balancers, and databases, using a simple and declarative configuration language. Infrastructure as Code (IaC) is the practice of defining and managing your infrastructure resources using code, such as Terraform configuration files. By using IaC, you can automate your infrastructure provisioning and deployment processes, reduce human errors, and increase the consistency and reliability of your infrastructure.
 
 
 
@@ -42,7 +44,7 @@ The following tags are applied to each resource created within the plan by defau
 * NS_Environment
 * NS_Application
 
-# Deploy ContosoFinance Web App
+# Deploy Contoso Finance Web App
 
 1. Install Terraform [package](https://learn.hashicorp.com/tutorials/terraform/install-cli)
 2. [Fork/copy](https://docs.microsoft.com/en-us/azure/devops/repos/git/forks?view=azure-devops&tabs=visual-studio#create-the-fork) this repo rep
