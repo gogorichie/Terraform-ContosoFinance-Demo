@@ -1,11 +1,23 @@
-# SQL #
+#Create KeyVault SQL password
+resource "random_password" "sqlpassword" {
+  length  = 20
+  special = true
+}
+#Create Key Vault Secret
+resource "azurerm_key_vault_secret" "sqlkvsecret" {
+  name         = "sql-server-password"
+  value        = random_password.sqlpassword.result
+  key_vault_id = azurerm_key_vault.kv1.id
+  depends_on   = [azurerm_key_vault.kv1]
+}
+
 resource "azurerm_mssql_server" "sql" {
   name                         = "${var.appname}-${var.NS_Environment}-sql"
   location                     = azurerm_resource_group.rg.location
   resource_group_name          = azurerm_resource_group.rg.name
   version                      = "12.0"
   administrator_login          = "SysAdmin"
-  administrator_login_password = "Ajsy37_8fhewkb9!29Cfbchda"
+  administrator_login_password = azurerm_key_vault_secret.sqlkvsecret.value
 }
 
 resource "azurerm_mssql_firewall_rule" "sql-fw-rule" {
