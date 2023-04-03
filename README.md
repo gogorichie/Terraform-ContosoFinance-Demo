@@ -1,6 +1,6 @@
 # Introduction 
 
-This repository contains a sample Azure App Service and Terraform sample code to deploy it. This is for demonstrate/test purposes only using IaC. Feel free to use these as you wish! and create an issue if you find any:) This project was inspired by [SoniaConti](https://github.com/SoniaConti) and her ARM project https://github.com/SoniaConti/ContosoFinance-Demo.
+This repository contains a sample Azure App Service and Terraform sample code to deploy it. This is for demonstrate/test purposes only using IaC. Feel free to use these as you wish! and create an issue if you find any:) This project was inspired by [SoniaConti](https://github.com/SoniaConti) and her [ARM project](https://github.com/SoniaConti/ContosoFinance-Demo).
 
 
 <p align="center">
