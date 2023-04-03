@@ -1,0 +1,37 @@
+# SQL #
+resource "azurerm_mssql_server" "sql" {
+  name                         = "${var.appname}-${var.NS_Environment}-sql"
+  location                     = azurerm_resource_group.rg.location
+  resource_group_name          = azurerm_resource_group.rg.name
+  version                      = "12.0"
+  administrator_login          = "SysAdmin"
+  administrator_login_password = "Ajsy37_8fhewkb9!29Cfbchda"
+}
+
+resource "azurerm_mssql_firewall_rule" "sql-fw-rule" {
+  name             = "${var.appname}-${var.NS_Environment}-sql-fwrule"
+  server_id        = azurerm_mssql_server.sql.id
+  start_ip_address = "0.0.0.0"
+  end_ip_address   = "0.0.0.0"
+  depends_on = [
+    azurerm_mssql_server.sql
+  ]
+}
+
+resource "azurerm_mssql_database" "db" {
+  name                        = "${var.appname}${var.NS_Environment}db"
+  server_id                   = azurerm_mssql_server.sql.id
+  collation                   = "SQL_Latin1_General_CP1_CI_AS"
+  min_capacity                = 0.5
+  max_size_gb                 = 10
+  read_scale                  = false
+  sku_name                    = "GP_S_Gen5_2"
+  zone_redundant              = false
+  auto_pause_delay_in_minutes = 60
+  tags                        = local.tags
+  storage_account_type        = "Local"
+  depends_on = [
+    azurerm_mssql_server.sql
+  ]
+}
+
