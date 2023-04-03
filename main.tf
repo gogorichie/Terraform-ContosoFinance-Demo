@@ -55,12 +55,11 @@ resource "azurerm_storage_container" "container" {
 
 resource "random_id" "kvname" {
   byte_length = 3
-  prefix      = "kv"
 }
 
 resource "azurerm_key_vault" "kv1" {
   depends_on                  = [azurerm_resource_group.rg]
-  name                        = "${azurerm_resource_group.rg.name}-${random_id.kvname.hex}"
+  name                        = "${var.appname}${var.NS_Environment}kv${random_id.kvname.hex}"
   location                    = azurerm_resource_group.rg.location
   resource_group_name         = azurerm_resource_group.rg.name
   enabled_for_disk_encryption = true
