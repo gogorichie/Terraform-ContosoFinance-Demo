@@ -1,5 +1,15 @@
 # Introduction 
 
+This repository contains a sample Azure App Service and Terraform sample code to deploy it. This is a I used to demonstrate/test purposes only. Feel free to use these as you wish! and create an issue if you find any:) This project was inspired by [SoniaConti](https://github.com/SoniaConti) and her ARM project https://github.com/SoniaConti/ContosoFinance-Demo.
+
+
+<p align="center">
+    <img src ="https://img.shields.io/github/repo-size/gogorichie/Terraform-ContosoFinance-Demo" alt="Repository Size">
+    <img src ="https://img.shields.io/github/languages/top/gogorichie/Terraform-ContosoFinance-Demo" alt="languages">
+    <img src ="https://img.shields.io/github/last-commit/gogorichie/Terraform-ContosoFinance-Demo" alt="Last Commit">
+    <img src ="https://img.shields.io/github/issues/gogorichie/Terraform-ContosoFinance-Demo?color=important" alt="Open Issues">
+    <img src ="https://img.shields.io/github/issues-pr/gogorichie/Terraform-ContosoFinance-Demo?color=yellowgreen" alt="Open Pull Reqeusts">
+</p>
 In this project we will create a Website using Azure App Service.
 
 
