@@ -56,7 +56,7 @@ resource "azurerm_storage_container" "container" {
 resource "random_string" "kvname" {
   length  = 4
   upper   = false
-  number  = true
+  numeric  = true
   lower   = true
   special = false
 }

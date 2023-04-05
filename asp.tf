@@ -25,6 +25,11 @@ resource "azurerm_linux_web_app" "web-app-site" {
     minimum_tls_version     = "1.2"
     scm_minimum_tls_version = "1.2"
   }
+  app_settings = {
+    APPINSIGHTS_INSTRUMENTATIONKEY             = azurerm_application_insights.ai.instrumentation_key
+    APPLICATIONINSIGHTS_CONNECTION_STRING      = azurerm_application_insights.ai.connection_string
+    ApplicationInsightsAgent_EXTENSION_VERSION = "~3"
+  }
   depends_on = [
     azurerm_service_plan.asp
   ]
@@ -56,6 +61,11 @@ resource "azurerm_linux_web_app" "web-app-api" {
     always_on               = false
     minimum_tls_version     = "1.2"
     scm_minimum_tls_version = "1.2"
+  }
+  app_settings = {
+    APPINSIGHTS_INSTRUMENTATIONKEY             = azurerm_application_insights.ai.instrumentation_key
+    APPLICATIONINSIGHTS_CONNECTION_STRING      = azurerm_application_insights.ai.connection_string
+    ApplicationInsightsAgent_EXTENSION_VERSION = "~3"
   }
   depends_on = [
     azurerm_service_plan.asp
