@@ -12,6 +12,15 @@ resource "azurerm_resource_group" "rg" {
   name     = "${var.appname}-${var.NS_Environment}-rg"
   location = var.location
   tags     = local.tags
+
+  lifecycle {
+    ignore_changes = [
+      tags["ExpirationDate"],
+      tags["Creator"],
+      tags["CreationDate"],
+      tags["Owner"]
+    ]
+  }
 }
 
 resource "azurerm_log_analytics_workspace" "law" {
@@ -44,6 +53,7 @@ resource "azurerm_storage_account" "sa" {
   resource_group_name      = azurerm_resource_group.rg.name
   account_tier             = "Standard"
   account_replication_type = "GRS"
+  min_tls_version          = "TLS1_2"
   tags                     = local.tags
 }
 
@@ -56,7 +66,7 @@ resource "azurerm_storage_container" "container" {
 resource "random_string" "kvname" {
   length  = 4
   upper   = false
-  numeric  = true
+  numeric = true
   lower   = true
   special = false
 }
