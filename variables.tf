@@ -1,35 +1,50 @@
 variable "location" {
   type    = string
-  default = "east us 2"
+  default = "WestEurope"
 }
 
-variable "NS_Application" {
+variable "hostingplanname" {
   type    = string
-  default = "rlewisfinance"
-}
-variable "NS_Environment" {
-  type    = string
-  default = "demo"
-}
-variable "appname" {
-  type    = string
-  default = "rlewisfinance"
+  default = "ContosoFinance-Demo-Plan"
 }
 
-variable "appsku" {
+variable "webappname" {
   type    = string
-  default = "Free"
+  default = "ContosoFinance-Demo-Site"
 }
 
-variable "appsize" {
+variable "apiname" {
   type    = string
-  default = "f1"
+  default = "ContosoFinance-Demo-Api"
 }
 
-variable "kind" {
+variable "sqlservername" {
   type    = string
-  default = "Linux"
+  default = "ContosoFinance-Demo-Sql"
 }
 
+variable "databasename" {
+  type    = string
+  default = "contosofinancedemodb"
+}
 
+variable "skuName" {
+  type    = string
+  default = "F1"
+}
+
+variable "skuCapacity" {
+  type    = number
+  default = 1
+}
+
+variable "sqlAdministratorLogin" {
+  type    = string
+  default = "SysAdmin"
+}
+
+variable "sqlAdministratorLoginPassword" {
+  type    = string
+  default = "Ajsy37_8fhewkb9!29Cfbchda"
+}
 

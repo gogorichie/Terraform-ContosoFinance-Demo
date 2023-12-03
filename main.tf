@@ -1,97 +1,162 @@
 provider "azurerm" {
-  features {}
+  features = {}
 }
 
-locals {
-  tags = merge({ "NS_Application" = var.NS_Application }, { "NS_Environment" = var.NS_Environment })
-}
+variable "location" {
+  type    = string
+  default = "WestEurope"
 
-data "azurerm_client_config" "current" {}
-
-resource "azurerm_resource_group" "rg" {
-  name     = "${var.appname}-${var.NS_Environment}-rg"
-  location = var.location
-  tags     = local.tags
-
-  lifecycle {
-    ignore_changes = [
-      tags["ExpirationDate"],
-      tags["Creator"],
-      tags["CreationDate"],
-      tags["Owner"]
-    ]
+  validation {
+    condition     = var.location == "WestEurope" || var.location == "NorthEurope"
+    error_message = "Invalid location. Allowed values are WestEurope or NorthEurope."
   }
 }
 
-resource "azurerm_log_analytics_workspace" "law" {
-  name                = "${var.appname}-${var.NS_Environment}-law"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  sku                 = "PerGB2018"
-  retention_in_days   = 30
-  tags                = local.tags
-  depends_on = [
-    azurerm_resource_group.rg
-  ]
+variable "ProjectName" {
+  type    = string
+  default = "ContosoFinance-Demo"
 }
 
-resource "azurerm_application_insights" "ai" {
-  name                = "${var.appname}-${var.NS_Environment}-ai"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  workspace_id        = azurerm_log_analytics_workspace.law.id
-  application_type    = "web"
-  tags                = local.tags
-  depends_on = [
-    azurerm_log_analytics_workspace.law
-  ]
+variable "hostingPlanName" {
+  type    = string
+  default = "ContosoFinance-Demo-Plan"
 }
 
-resource "azurerm_storage_account" "sa" {
-  name                     = "${var.appname}${var.NS_Environment}sa"
-  location                 = azurerm_resource_group.rg.location
-  resource_group_name      = azurerm_resource_group.rg.name
-  account_tier             = "Standard"
-  account_replication_type = "GRS"
-  min_tls_version          = "TLS1_2"
-  tags                     = local.tags
+variable "webappname" {
+  type    = string
+  default = "ContosoFinance-Demo-Site"
 }
 
-resource "azurerm_storage_container" "container" {
-  name                  = "${var.appname}-${var.NS_Environment}-blob"
-  storage_account_name  = azurerm_storage_account.sa.name
-  container_access_type = "private"
+variable "apiname" {
+  type    = string
+  default = "ContosoFinance-Demo-Api"
 }
 
-resource "random_string" "kvname" {
-  length  = 4
-  upper   = false
-  numeric = true
-  lower   = true
-  special = false
+variable "sqlserverName" {
+  type    = string
+  default = "ContosoFinance-Demo-Sql"
 }
 
-resource "azurerm_key_vault" "kv1" {
-  depends_on                  = [azurerm_resource_group.rg]
-  name                        = "${var.appname}${var.NS_Environment}kv${random_string.kvname.result}"
-  location                    = azurerm_resource_group.rg.location
-  resource_group_name         = azurerm_resource_group.rg.name
-  enabled_for_disk_encryption = true
-  tenant_id                   = data.azurerm_client_config.current.tenant_id
-  soft_delete_retention_days  = 7
-  purge_protection_enabled    = false
-  sku_name                    = "standard"
-  access_policy {
-    tenant_id = data.azurerm_client_config.current.tenant_id
-    object_id = data.azurerm_client_config.current.object_id
-    key_permissions = [
-      "Get",
-    ]
-    secret_permissions = [
-      "Get", "Backup", "Delete", "List", "Purge", "Recover", "Restore", "Set",
-    ]
-    storage_permissions = [
-      "Get",
-    ]
+variable "databaseName" {
+  type    = string
+  default = "contosofinancedemodb"
+}
+
+variable "skuName" {
+  type    = string
+  default = "F1"
+
+  validation {
+    condition     = var.skuName in ["F1", "D1", "B1", "B2", "B3", "S1", "S2", "S3", "P1", "P2", "P3", "P4"]
+    error_message = "Invalid SKU name."
+  }
+}
+
+variable "skuCapacity" {
+  type    = number
+  default = 1
+
+  validation {
+    condition     = var.skuCapacity >= 1 && var.skuCapacity <= 3
+    error_message = "Invalid SKU capacity. It must be between 1 and 3."
+  }
+}
+
+variable "sqlAdministratorLogin" {
+  type    = string
+  default = "SysAdmin"
+}
+
+variable "sqlAdministratorLoginPassword" {
+  type    = string
+  default = "Ajsy37_8fhewkb9!29Cfbchda"
+}
+
+variable "repoURL" {
+  type    = string
+  default = "https://github.com/SoniaConti/ContosoFinance-Demo-Web.git"
+}
+
+variable "branch" {
+  type    = string
+  default = "master"
+}
+
+variable "APIrepoURL" {
+  type    = string
+  default = "https://github.com/SoniaConti/ContosoFinance-Demo-API.git"
+}
+
+resource "azurerm_sql_server" "example" {
+  name                         = var.sqlserverName
+  location                     = var.location
+  resource_group_name          = azurerm_resource_group.example.name
+  administrator_login          = var.sqlAdministratorLogin
+  administrator_login_password = var.sqlAdministratorLoginPassword
+  version                      = "12.0"
+}
+
+resource "azurerm_sql_database" "example" {
+  name                        = var.databaseName
+  server_name                 = azurerm_sql_server.example.name
+  resource_group_name         = azurerm_resource_group.example.name
+  collation                   = "SQL_Latin1_General_CP1_CI_AS"
+  max_size_bytes              = 1073741824
+  sku_name                    = "Basic"
+}
+
+resource "azurerm_sql_firewall_rule" "example" {
+  name                        = "AllowAllWindowsAzureIps"
+  server_name                 = azurerm_sql_server.example.name
+  resource_group_name         = azurerm_resource_group.example.name
+  start_ip_address            = "0.0.0.0"
+  end_ip_address              = "0.0.0.0"
+}
+
+resource "azurerm_app_service_plan" "example" {
+  name                = var.hostingPlanName
+  location            = var.location
+  resource_group_name = azurerm_resource_group.example.name
+
+  sku {
+    tier = var.skuName
+    size = var.skuCapacity
+  }
+}
+
+resource "azurerm_web_app" "example" {
+  name                = var.webappname
+  location            = var.location
+  resource_group_name = azurerm_resource_group.example.name
+
+  server_farm_id = azurerm_app_service_plan.example.id
+
+  site_config {
+    always_on = true
+  }
+
+  source_control {
+    repo_url                = var.repoURL
+    branch                  = var.branch
+    is_manual_integration  = true
+  }
+
+  app_settings = {
+    "offersAPIUrl" = "https://${var.apiname}.azurewebsites.net/api/get"
+  }
+}
+
+resource "azurerm_web_app" "api_example" {
+  name                = var.apiname
+  kind                = "api"
+  location            = var.location
+  resource_group_name = azurerm_resource_group.example.name
+
+  server_farm_id = azurerm_app_service_plan.example.id
+
+  source_control {
+    repo_url                = var.APIrepoURL
+    branch                  = var.branch
+    is_manual_integration  = true
   }
 }
