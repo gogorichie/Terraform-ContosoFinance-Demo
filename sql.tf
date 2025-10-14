@@ -20,8 +20,8 @@ resource "azurerm_mssql_server" "sql" {
   administrator_login_password = azurerm_key_vault_secret.sqlkvsecret.value
 }
 
-resource "azurerm_mssql_firewall_rule" "sql-fw-rule" {
-  name             = "${var.appname}-${var.NS_Environment}-sql-fwrule"
+resource "azurerm_mssql_firewall_rule" "sql-fw-rule-azure-services" {
+  name             = "${var.appname}-${var.NS_Environment}-sql-fwrule-azure"
   server_id        = azurerm_mssql_server.sql.id
   start_ip_address = "0.0.0.0"
   end_ip_address   = "0.0.0.0"
@@ -29,6 +29,14 @@ resource "azurerm_mssql_firewall_rule" "sql-fw-rule" {
     azurerm_mssql_server.sql
   ]
 }
+
+# Add Virtual Network Rule for better security (requires VNet integration)
+# This is commented out but shows best practice approach
+# resource "azurerm_mssql_virtual_network_rule" "sql-vnet-rule" {
+#   name      = "${var.appname}-${var.NS_Environment}-sql-vnet-rule"
+#   server_id = azurerm_mssql_server.sql.id
+#   subnet_id = azurerm_subnet.app_subnet.id
+# }
 
 resource "azurerm_mssql_database" "db" {
   name                        = "${var.appname}${var.NS_Environment}db"

@@ -43,14 +43,105 @@ The following tags are applied to each resource created within the plan by defau
 
 # Deploy Contoso Finance Web App
 
-1. Install Terraform [package](https://learn.hashicorp.com/tutorials/terraform/install-cli)
-2. [Fork/copy](https://docs.microsoft.com/en-us/azure/devops/repos/git/forks?view=azure-devops&tabs=visual-studio#create-the-fork) this repo rep
-3. Open the project locally with [Visual Studio Code](https://code.visualstudio.com/download) or your favorite text editor
-4. Log into your [Azure Subscription](https://azure.microsoft.com/en-us/free/) wishing to deploy too with Az Login and set the root subscription as the active subscription:
-    `az account set --subscription <<subscription id>>`
-5.     terraform init
-   - terraform plan
-   - terraform apply
+## Prerequisites
+
+1. **Install Required Tools:**
+   - Install Terraform: `winget install Hashicorp.Terraform`
+   - Install Azure CLI: `winget install Microsoft.AzureCLI`
+
+2. **Clone/Fork Repository:**
+   - [Fork this repository](https://docs.microsoft.com/en-us/azure/devops/repos/git/forks?view=azure-devops&tabs=visual-studio#create-the-fork)
+   - Open locally with [Visual Studio Code](https://code.visualstudio.com/download)
+
+## Quick Deployment (Recommended)
+
+**Using the automated deployment script:**
+
+```powershell
+# Navigate to the project directory
+cd c:\Deploy\Terraform-ContosoFinance-Demo-1
+
+# Run the deployment script (handles authentication and deployment)
+.\deploy.ps1
+```
+
+## Manual Deployment
+
+**Step-by-step manual deployment:**
+
+```powershell
+# 1. Login to Azure
+az login
+
+# 2. Set your target subscription
+az account set --subscription "Your-Subscription-Name-or-ID"
+
+# 3. Initialize Terraform
+terraform init
+
+# 4. Validate configuration
+terraform validate
+
+# 5. Create deployment plan
+terraform plan -out=tfplan
+
+# 6. Apply the deployment
+terraform apply tfplan
+```
+
+## Configuration Options
+
+Create a `terraform.tfvars` file to customize your deployment:
+
+```hcl
+location        = "East US 2"
+NS_Application  = "your-app-name"
+NS_Environment  = "demo"  # dev, demo, staging, prod
+appname         = "your-unique-app-name"
+```
+
+## Resource Cleanup
+
+**To destroy all resources:**
+
+```powershell
+# Using the cleanup script (recommended)
+.\cleanup.ps1
+
+# Or manually
+terraform destroy
+```
+
+## What Gets Deployed
+
+- **Resource Group** - Container for all resources
+- **App Service Plan** - Hosting plan (B1 for demo, P1v3 for prod)
+- **Web Apps** - Main site and API endpoints
+- **SQL Server & Database** - Backend database with firewall rules
+- **Key Vault** - Secure storage for secrets (with purge protection)
+- **Storage Account** - Blob storage for application data
+- **Application Insights** - Application monitoring and analytics
+- **Log Analytics Workspace** - Centralized logging
+- **Stream Analytics Job** - Real-time data processing
+
+## Security Features
+
+- ✅ HTTPS-only web applications
+- ✅ Key Vault with purge protection enabled
+- ✅ Minimum TLS 1.2 for all services
+- ✅ Private storage containers
+- ✅ Restricted SQL Server firewall rules
+- ✅ Application Insights integration
+
+## Monitoring & Outputs
+
+After deployment, check the outputs for:
+- Web application URLs
+- Database connection information
+- Key Vault URI
+- Application Insights connection string
+
+Visit the Azure Portal to monitor your resources and set up alerts.
 
 
 

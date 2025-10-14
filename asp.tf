@@ -5,7 +5,7 @@ resource "azurerm_service_plan" "asp" {
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   os_type             = "Linux"
-  sku_name            = "F1"
+  sku_name            = var.NS_Environment == "prod" ? "P1v3" : "B1"
   tags                = local.tags
 }
 
@@ -18,7 +18,7 @@ resource "azurerm_linux_web_app" "web-app-site" {
   client_certificate_enabled = false
   client_certificate_mode    = "Required"
   enabled                    = true
-  https_only                 = false
+  https_only                 = true
   tags                       = local.tags
   site_config {
     always_on               = false
@@ -55,7 +55,7 @@ resource "azurerm_linux_web_app" "web-app-api" {
   client_certificate_enabled = false
   client_certificate_mode    = "Required"
   enabled                    = true
-  https_only                 = false
+  https_only                 = true
   tags                       = local.tags
   site_config {
     always_on               = false
