@@ -1,6 +1,6 @@
 
 resource "azurerm_stream_analytics_job" "job" {
-  name                                     = "${var.appname}-${var.NS_Environment}-job"
+  name                                     = "${var.NS_Application}-${var.NS_Environment}-job"
   location                                 = azurerm_resource_group.rg.location
   resource_group_name                      = azurerm_resource_group.rg.name
   compatibility_level                      = "1.2"

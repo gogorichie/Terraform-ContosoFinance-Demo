@@ -9,7 +9,7 @@ locals {
 data "azurerm_client_config" "current" {}
 
 resource "azurerm_resource_group" "rg" {
-  name     = "${var.appname}-${var.NS_Environment}-rg"
+  name     = "${var.NS_Application}-${var.NS_Environment}-rg"
   location = var.location
   tags     = local.tags
 
@@ -24,7 +24,7 @@ resource "azurerm_resource_group" "rg" {
 }
 
 resource "azurerm_log_analytics_workspace" "law" {
-  name                = "${var.appname}-${var.NS_Environment}-law"
+  name                = "${var.NS_Application}-${var.NS_Environment}-law"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   sku                 = "PerGB2018"
@@ -36,7 +36,7 @@ resource "azurerm_log_analytics_workspace" "law" {
 }
 
 resource "azurerm_application_insights" "ai" {
-  name                = "${var.appname}-${var.NS_Environment}-ai"
+  name                = "${var.NS_Application}-${var.NS_Environment}-ai"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   workspace_id        = azurerm_log_analytics_workspace.law.id
@@ -48,7 +48,7 @@ resource "azurerm_application_insights" "ai" {
 }
 
 resource "azurerm_storage_account" "sa" {
-  name                     = "${var.appname}${var.NS_Environment}sa"
+  name                     = "${var.NS_Application}${var.NS_Environment}sa"
   location                 = azurerm_resource_group.rg.location
   resource_group_name      = azurerm_resource_group.rg.name
   account_tier             = "Standard"
@@ -59,7 +59,7 @@ resource "azurerm_storage_account" "sa" {
 }
 
 resource "azurerm_storage_container" "container" {
-  name                  = "${var.appname}-${var.NS_Environment}-blob"
+  name                  = "${var.NS_Application}-${var.NS_Environment}-blob"
   storage_account_name  = azurerm_storage_account.sa.name
   container_access_type = "private"
 }
@@ -74,7 +74,7 @@ resource "random_string" "kvname" {
 
 resource "azurerm_key_vault" "kv1" {
   depends_on                  = [azurerm_resource_group.rg]
-  name                        = "${var.appname}${var.NS_Environment}kv${random_string.kvname.result}"
+  name                        = "${var.NS_Application}${var.NS_Environment}kv${random_string.kvname.result}"
   location                    = azurerm_resource_group.rg.location
   resource_group_name         = azurerm_resource_group.rg.name
   enabled_for_disk_encryption = true

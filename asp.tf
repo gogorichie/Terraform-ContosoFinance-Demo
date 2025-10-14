@@ -1,7 +1,7 @@
 
 #App Service Plan
 resource "azurerm_service_plan" "asp" {
-  name                = "${var.appname}-${var.NS_Environment}-Plan"
+  name                = "${var.NS_Application}-${var.NS_Environment}-Plan"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   os_type             = "Linux"
@@ -10,7 +10,7 @@ resource "azurerm_service_plan" "asp" {
 }
 
 resource "azurerm_linux_web_app" "web-app-site" {
-  name                       = "${var.appname}-${var.NS_Environment}-Site"
+  name                       = "${var.NS_Application}-${var.NS_Environment}-Site"
   location                   = azurerm_resource_group.rg.location
   resource_group_name        = azurerm_resource_group.rg.name
   service_plan_id            = azurerm_service_plan.asp.id
@@ -47,7 +47,7 @@ resource "azurerm_app_service_source_control" "apssc-site" {
 }
 
 resource "azurerm_linux_web_app" "web-app-api" {
-  name                       = "${var.appname}-${var.NS_Environment}-Api"
+  name                       = "${var.NS_Application}-${var.NS_Environment}-Api"
   location                   = azurerm_resource_group.rg.location
   resource_group_name        = azurerm_resource_group.rg.name
   service_plan_id            = azurerm_service_plan.asp.id

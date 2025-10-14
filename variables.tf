@@ -26,16 +26,5 @@ variable "NS_Environment" {
   }
 }
 
-variable "appname" {
-  description = "Base name for application resources"
-  type        = string
-  default     = "rlewisfinance"
-  
-  validation {
-    condition     = can(regex("^[a-z0-9]+$", var.appname)) && length(var.appname) <= 20
-    error_message = "App name must contain only lowercase letters and numbers, max 20 characters."
-  }
-}
-
 
 
